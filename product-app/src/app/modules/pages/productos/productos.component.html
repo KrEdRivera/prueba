@@ -1,0 +1,68 @@
+<div class="container my-5">
+  <h2 class="mb-4">Lista de Productos</h2>
+
+  <!-- Tabla de Productos -->
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Descripción</th>
+          <th>Stock</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of productos">
+          <td>{{ producto.id }}</td>
+          <td>{{ producto.nombre }}</td>
+          <td>${{ producto.precio }}</td>
+          <td>{{ producto.descripcion }}</td>
+          <td>{{ producto.stock }}</td>
+          <td>
+            <button class="btn btn-info btn-sm me-2" (click)="iniciarEdicion(producto)">Editar</button>
+            <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.id!)">Eliminar</button>
+          </td>
+        </tr>
+        <tr *ngIf="productos.length === 0">
+          <td colspan="6" class="text-center">No hay productos disponibles.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Formulario Unificado para Crear y Editar Producto -->
+  <div class="card mt-5">
+    <div
+      class="card-header"
+      [ngClass]="modoEdicion ? 'bg-warning text-dark' : 'bg-success text-white'">
+      {{ modoEdicion ? 'Editar Producto' : 'Crear Nuevo Producto' }}
+    </div>
+    <div class="card-body">
+      <form (submit)="guardarProducto(); $event.preventDefault()">
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre:</label>
+          <input type="text" id="nombre" class="form-control" [(ngModel)]="productoActual.nombre" name="nombre" required>
+        </div>
+        <div class="mb-3">
+          <label for="precio" class="form-label">Precio:</label>
+          <input type="number" id="precio" class="form-control" [(ngModel)]="productoActual.precio" name="precio" required step="0.01">
+        </div>
+        <div class="mb-3">
+          <label for="descripcion" class="form-label">Descripción:</label>
+          <textarea id="descripcion" class="form-control" [(ngModel)]="productoActual.descripcion" name="descripcion" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="stock" class="form-label">Stock:</label>
+          <input type="number" id="stock" class="form-control" [(ngModel)]="productoActual.stock" name="stock">
+        </div>
+        <button type="submit" class="btn" [ngClass]="modoEdicion ? 'btn-primary me-2' : 'btn-success'">
+          {{ modoEdicion ? 'Actualizar Producto' : 'Crear Producto' }}
+        </button>
+        <button *ngIf="modoEdicion" type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+      </form>
+    </div>
+  </div>
+</div>
